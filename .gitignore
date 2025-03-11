@@ -17,6 +17,7 @@ __pycache__/
 
 # 환경 변수 파일
 .env
+*.env
 .env.local
 .env.development
 .env.test
