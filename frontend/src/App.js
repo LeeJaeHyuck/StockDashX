@@ -8,6 +8,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Portfolio from './pages/Portfolio';
 import StockDetail from './pages/StockDetail';
+import Simulation from './pages/Simulation';
+import News from './pages/News';
 import NotFound from './pages/NotFound';
 
 // 레이아웃 및 보호된 라우트 컴포넌트 임포트
@@ -49,6 +51,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Portfolio />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/simulation/*" 
+              element={
+                <ProtectedRoute>
+                  <Simulation />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/news/*" 
+              element={
+                <ProtectedRoute>
+                  <News />
                 </ProtectedRoute>
               } 
             />

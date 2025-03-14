@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, stocks, portfolios, transactions
+from app.api.v1.endpoints import auth, stocks, portfolios, transactions, simulation, news
 
 api_router = APIRouter()
 
@@ -14,3 +14,9 @@ api_router.include_router(portfolios.router, prefix="/portfolios", tags=["포트
 
 # 거래 내역 엔드포인트 등록
 api_router.include_router(transactions.router, prefix="/transactions", tags=["거래 내역"])
+
+# 모의 투자 엔드포인트 등록
+api_router.include_router(simulation.router, prefix="/simulation", tags=["모의 투자"])
+
+# 뉴스 엔드포인트 등록
+api_router.include_router(news.router, prefix="/news", tags=["뉴스"])

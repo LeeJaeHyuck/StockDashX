@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { createTransaction } from '../../api/transactions';
+import { useNavigate } from 'react-router-dom';
+import { createSimulationTransaction } from '../../api/simulation';
 import { searchStocks, getStockQuote } from '../../api/stocks';
 
 /**
- * 거래 내역 생성 폼 컴포넌트
+ * 모의 투자 거래 생성 폼 컴포넌트
  * 
- * 새 거래 내역을 생성하기 위한 폼을 제공합니다.
+ * 모의 투자 계좌에 새 거래 내역을 생성하기 위한 폼을 제공합니다.
  * 
  * @param {Object} props - 컴포넌트 속성
- * @param {number} props.portfolioId - 포트폴리오 ID
- * @param {Function} props.onSuccess - 폼 제출 성공 시 호출될 콜백 함수
+ * @param {number} props.accountId - 모의 투자 계좌 ID
  */
-const TransactionForm = ({ onSuccess }) => {
+const SimulationTradeForm = ({ accountId }) => {
   // 네비게이션 훅
   const navigate = useNavigate();
-  const { portfolioId } = useParams();  // URL에서 portfolioId 가져오기
   
   // 폼 상태 초기화
   const [formData, setFormData] = useState({
-    portfolio_id: portfolioId,
+    account_id: accountId,
     symbol: '',
     transaction_type: 'BUY',
     quantity: 1,
@@ -161,15 +159,11 @@ const TransactionForm = ({ onSuccess }) => {
       setSubmitting(true);
       setError(null);
       
-      // API를 통해 거래 내역 생성
-      await createTransaction(formData);
+      // API를 통해 모의 투자 거래 내역 생성
+      await createSimulationTransaction(formData);
       
-      // 성공 콜백 호출 또는 포트폴리오 상세 페이지로 이동
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        navigate(`/portfolio/${portfolioId}`);
-      }
+      // 계좌 상세 페이지로 이동
+      navigate(`/simulation/${accountId}`);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -181,7 +175,7 @@ const TransactionForm = ({ onSuccess }) => {
    * 취소 버튼 핸들러
    */
   const handleCancel = () => {
-    navigate(`/portfolio/${portfolioId}`);
+    navigate(`/simulation/${accountId}`);
   };
 
   // 총액 계산
@@ -189,7 +183,7 @@ const TransactionForm = ({ onSuccess }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow">
-      <h2 className="text-xl font-semibold mb-4">거래 추가</h2>
+      <h2 className="text-xl font-semibold mb-4">모의 투자 거래 추가</h2>
       
       {/* 에러 메시지 */}
       {error && (
@@ -356,4 +350,4 @@ const TransactionForm = ({ onSuccess }) => {
   );
 };
 
-export default TransactionForm;
+export default SimulationTradeForm;

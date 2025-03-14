@@ -36,7 +36,7 @@ async def create_transaction(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="포트폴리오를 찾을 수 없습니다."
         )
-    
+
     if portfolio.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

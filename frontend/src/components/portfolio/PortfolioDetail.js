@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getPortfolioDetail } from '../../api/portfolios';
 import { getPortfolioTransactions } from '../../api/transactions';
 
@@ -11,7 +11,9 @@ import { getPortfolioTransactions } from '../../api/transactions';
  * @param {Object} props - 컴포넌트 속성
  * @param {number} props.portfolioId - 포트폴리오 ID
  */
-const PortfolioDetail = ({ portfolioId }) => {
+const PortfolioDetail = () => {
+  // useParams로 URL에서 portfolioId 추출
+  const { portfolioId } = useParams();
   // 포트폴리오 정보 상태
   const [portfolio, setPortfolio] = useState(null);
   // 거래 내역 상태
@@ -33,7 +35,7 @@ const PortfolioDetail = ({ portfolioId }) => {
       try {
         setLoading(true);
         setError(null);
-        
+
         // 포트폴리오 상세 정보 조회
         const portfolioData = await getPortfolioDetail(portfolioId);
         setPortfolio(portfolioData);
@@ -93,6 +95,7 @@ const PortfolioDetail = ({ portfolioId }) => {
           </Link>
           <Link
             to={`/portfolio/${portfolioId}/transaction/new`}
+            state={{ portfolioId }}
             className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
           >
             거래 추가

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FeaturedNews from '../components/news/FeaturedNews';
 
 const Dashboard = () => {
   // 실제 구현에서는 API에서 데이터 가져오기
@@ -140,41 +141,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-// import React from 'react';
-// import { useAuth } from '../hooks/useAuth';
-// import { useNavigate } from 'react-router-dom';
-
-// const Dashboard = () => {
-//   const { user, logout } = useAuth();
-//   const navigate = useNavigate();
-
-//   // 로그인 상태가 아니면 로그인 페이지로 리다이렉트
-//   React.useEffect(() => {
-//     if (!user) {
-//       navigate('/login');
-//     }
-//   }, [user, navigate]);
-
-//   if (!user) return null;
-
-//   return (
-//     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-4">
-//       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow">
-//         <h1 className="text-center text-2xl font-bold">StockDashX 대시보드</h1>
-//         <div className="text-center">
-//           <p className="mb-4">환영합니다, <span className="font-semibold">{user.username}</span>님!</p>
-//           <p className="mb-6 text-sm text-gray-600">성공적으로 로그인했습니다.</p>
-//           <button
-//             onClick={logout}
-//             className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-//           >
-//             로그아웃
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
