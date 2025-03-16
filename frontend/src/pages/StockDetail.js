@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // useNavigate 추가
 import { getStockQuote } from '../api/stocks';
 import PriceChart from '../components/charts/PriceChart';
 
@@ -11,9 +11,8 @@ import PriceChart from '../components/charts/PriceChart';
 const StockDetail = () => {
   // URL 파라미터에서 주식 심볼 가져오기
   const { symbol } = useParams();
-  // URL 쿼리 파라미터에서 차트 간격 가져오기
-  const [searchParams] = useSearchParams();
-  const interval = searchParams.get('interval') || 'daily';
+  // 네비게이션 훅 사용
+  const navigate = useNavigate();
   
   // 주식 정보 상태
   const [stockData, setStockData] = useState(null);
@@ -50,6 +49,11 @@ const StockDetail = () => {
     return () => clearInterval(intervalId);
   }, [symbol]);
 
+  // 뒤로가기 핸들러
+  const handleGoBack = () => {
+    navigate(-1); // 브라우저 히스토리의 이전 페이지로 이동
+  };
+
   // 로딩 중 표시
   if (loading && !stockData) {
     return (
@@ -66,14 +70,30 @@ const StockDetail = () => {
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           <p>데이터를 불러오는 중 오류가 발생했습니다: {error}</p>
         </div>
+        {/* 뒤로가기 버튼 추가 */}
+        <button
+          onClick={handleGoBack}
+          className="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+        >
+          뒤로 가기
+        </button>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
+      {/* 헤더 영역 - 뒤로가기 버튼 추가 */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{symbol} 주식 정보</h1>
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={handleGoBack}
+            className="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700"
+          >
+            ← 뒤로 가기
+          </button>
+          <h1 className="text-2xl font-bold">{symbol} 주식 정보</h1>
+        </div>
       </div>
 
       {/* 주식 요약 정보 */}
@@ -108,7 +128,7 @@ const StockDetail = () => {
       )}
 
       {/* 주가 차트 */}
-      <PriceChart symbol={symbol} interval={interval} />
+      <PriceChart symbol={symbol} />
     </div>
   );
 };

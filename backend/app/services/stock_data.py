@@ -49,7 +49,7 @@ async def get_stock_quote(symbol: str):
             response = await client.get(ALPHA_VANTAGE_BASE_URL, params=params)
             response.raise_for_status()  # HTTP 오류 확인
             data = response.json()
-        
+        print(data)
         # API 응답 확인
         if "Global Quote" not in data or not data["Global Quote"]:
             raise HTTPException(status_code=404, detail=f"주식 {symbol}에 대한 데이터를 찾을 수 없습니다.")

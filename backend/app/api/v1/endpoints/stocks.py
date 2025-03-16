@@ -6,6 +6,8 @@ from app.db.models import Stock as StockModel
 from app.schemas.stocks import Stock as StockSchema, StockCreate, StockUpdate
 from app.services.stock_data import get_stock_quote, search_stocks, get_historical_data, update_stock_db
 from app.api.v1.endpoints.auth import get_current_user
+from datetime import datetime
+
 
 router = APIRouter()
 
@@ -48,6 +50,7 @@ async def get_stock_quote_endpoint(
     Returns:
         dict: 주식 시세 데이터
     """
+    
     # 외부 API를 통해 주식 시세 가져오기
     quote_data = await get_stock_quote(symbol)
     
@@ -55,6 +58,56 @@ async def get_stock_quote_endpoint(
     update_stock_db(db, quote_data)
     
     return quote_data
+
+# @router.get("/quote/{symbol}", response_model=dict)
+# async def get_stock_quote_endpoint(
+#     symbol: str,
+#     current_user = Depends(get_current_user),
+#     db: Session = Depends(get_db)
+# ):
+#     # 먼저 데이터베이스에서 주식 정보 조회
+#     db_stock = db.query(StockModel).filter(StockModel.symbol == symbol).first()
+    
+#     # 데이터베이스에 있고, 최근에 업데이트된 경우 (예: 5분 이내)
+#     if db_stock:
+#         # 데이터베이스 정보 반환
+        
+#         return {
+#             "symbol": db_stock.symbol,
+#             # "name": db_stock.name,
+#             "price": float(db_stock.last_price),
+#             # "change": float(quote_data.get("09. change", 0)),
+#             "change": 0,
+#             "change_percent": float(db_stock.change_percent),
+#             "volume": 0,  # 데이터베이스에 저장되지 않은 정보는 기본값 사용
+#             "latest_trading_day": "",
+#             "previous_close": 0,
+#             "timestamp": db_stock.updated_at.isoformat()
+#         }
+    
+#     try:
+#         # 데이터베이스에 없거나 오래된 경우 외부 API 호출
+#         quote_data = await get_stock_quote(symbol)
+        
+#         # 데이터베이스 업데이트
+#         update_stock_db(db, quote_data)
+        
+#         return quote_data
+#     except Exception as e:
+#         # API 호출 실패 시, 데이터베이스에 있는 정보라도 반환
+#         if db_stock:
+#             return {
+#                 "symbol": db_stock.symbol,
+#                 "name": db_stock.name,
+#                 "price": float(db_stock.last_price),
+#                 "change_percent": float(db_stock.change_percent),
+#                 "volume": 0,
+#                 "latest_trading_day": "",
+#                 "previous_close": 0,
+#                 "timestamp": db_stock.updated_at.isoformat()
+#             }
+#         # 완전히 실패한 경우 에러 발생
+#         raise HTTPException(status_code=503, detail=f"주식 정보를 가져오지 못했습니다: {str(e)}")
 
 @router.get("/history/{symbol}", response_model=dict)
 async def get_stock_history(

@@ -27,8 +27,16 @@ const FeaturedNews = ({ count = 3 }) => {
         
         // 시장 뉴스 API 호출
         const data = await getMarketNews(1, count);
-        setArticles(data.articles.slice(0, count));
+        
+        // 데이터 확인 및 안전하게 설정
+        if (data && data.articles && Array.isArray(data.articles)) {
+          setArticles(data.articles.slice(0, count));
+        } else {
+          console.error('예상치 못한 뉴스 데이터 형식:', data);
+          setArticles([]);
+        }
       } catch (err) {
+        console.error('뉴스 로드 오류:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -104,13 +112,13 @@ const FeaturedNews = ({ count = 3 }) => {
       
       <div className="space-y-4">
         {articles.map((article, index) => (
-          <a>
-            key={`${article.url}-${index}`}
+          <a
+            key={index}
             href={article.url}
-            target="_blank"
+            target="_blank"  // 새 탭에서 열기
             rel="noopener noreferrer"
             className="flex items-start group"
-          
+          >
             {/* 뉴스 썸네일 (있는 경우) */}
             {article.urlToImage && (
               <div className="flex-shrink-0 h-16 w-16 bg-gray-200 rounded overflow-hidden mr-3">
@@ -128,12 +136,12 @@ const FeaturedNews = ({ count = 3 }) => {
             <div className="flex-1 min-w-0">
               {/* 뉴스 제목 */}
               <h4 className="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-blue-600">
-                {article.title}
+                {article.title || '제목 없음'}
               </h4>
               
               {/* 출처와 날짜 */}
               <div className="mt-1 flex items-center text-xs text-gray-500">
-                <span>{article.source}</span>
+                <span>{article.source || '출처 미상'}</span>
                 <span className="mx-1">&middot;</span>
                 <span>{formatDate(article.publishedAt)}</span>
               </div>

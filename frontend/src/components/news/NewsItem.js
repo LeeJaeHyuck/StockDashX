@@ -7,12 +7,6 @@ import React from 'react';
  * 
  * @param {Object} props - 컴포넌트 속성
  * @param {Object} props.article - 뉴스 기사 정보
- * @param {string} props.article.title - 뉴스 제목
- * @param {string} props.article.description - 뉴스 설명
- * @param {string} props.article.url - 뉴스 URL
- * @param {string} props.article.urlToImage - 뉴스 이미지 URL
- * @param {string} props.article.source - 뉴스 출처
- * @param {string} props.article.publishedAt - 발행일
  */
 const NewsItem = ({ article }) => {
   // 날짜 포맷팅 함수
@@ -43,7 +37,7 @@ const NewsItem = ({ article }) => {
       <div className="relative h-48 bg-gray-200">
         <img
           src={article.urlToImage || defaultImageUrl}
-          alt={article.title}
+          alt={article.title || '뉴스 제목'}
           className="w-full h-full object-cover"
           onError={(e) => {
             e.target.onerror = null; // 무한 반복 방지
@@ -54,7 +48,7 @@ const NewsItem = ({ article }) => {
         {/* 출처 및 발행일 */}
         <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2">
           <div className="flex justify-between">
-            <span>{article.source}</span>
+            <span>{article.source || '출처 미상'}</span>
             <span>{formatDate(article.publishedAt)}</span>
           </div>
         </div>
@@ -64,7 +58,7 @@ const NewsItem = ({ article }) => {
       <div className="p-4">
         {/* 제목 */}
         <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-          {article.title}
+          {article.title || '제목 없음'}
         </h3>
         
         {/* 설명 */}
@@ -72,13 +66,13 @@ const NewsItem = ({ article }) => {
           {article.description || '설명이 없습니다.'}
         </p>
         
-        {/* 더 읽기 링크 */}
-        
+        {/* 더 읽기 링크 - 새 탭에서 열기 */}
+        <a
           href={article.url}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-        <a>
+        >
           자세히 읽기 &rarr;
         </a>
       </div>

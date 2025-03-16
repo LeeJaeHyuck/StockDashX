@@ -23,5 +23,5 @@ SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_key_change_in_production")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 # API 키
-STOCK_API_KEY = os.getenv("STOCK_API_KEY", "")
-NEWS_API_KEY = os.getenv("NEWS_API_KEY", "")
+STOCK_API_KEY = os.getenv("STOCK_API_KEY")
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")

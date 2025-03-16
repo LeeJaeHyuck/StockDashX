@@ -44,9 +44,17 @@ const NewsList = ({ symbol, getNewsFunction = getMarketNews, title = "최신 금
       const params = symbol ? [symbol, page, pageSize] : [page, pageSize];
       const data = await getNewsFunction(...params);
       
-      setArticles(data.articles);
-      setTotalResults(data.totalResults);
+      // 응답 처리 및 데이터 설정
+      if (data && data.articles && Array.isArray(data.articles)) {
+        setArticles(data.articles);
+        setTotalResults(data.totalResults || data.articles.length);
+      } else {
+        console.error('예상치 못한 뉴스 데이터 형식:', data);
+        setArticles([]);
+        setTotalResults(0);
+      }
     } catch (err) {
+      console.error('뉴스 로드 오류:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -101,7 +109,7 @@ const NewsList = ({ symbol, getNewsFunction = getMarketNews, title = "최신 금
       {/* 뉴스 그리드 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article, index) => (
-          <NewsItem key={`${article.url}-${index}`} article={article} />
+          <NewsItem key={index} article={article} />
         ))}
       </div>
       
